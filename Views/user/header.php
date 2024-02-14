@@ -42,9 +42,15 @@
                 echo '<li><a href="/home">Home</a></li>';
                 echo '<li><a href="/logout">Logout</a></li>';
                 echo '<li><a href="/profile">Profile</a></li>'; 
+                echo '<li><a href="/products">Products</a></li>'; 
               }else {
                 echo '<li><a href="/login">Login</a></li>';
                 echo '<li><a href="/registration">Registration</a></li>';
+              }
+              if(isset($_SESSION['userid'])){
+                echo $_SESSION['userid'];
+              }else{
+                echo '';
               }
                 ?>
                 

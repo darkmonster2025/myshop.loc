@@ -50,5 +50,19 @@ class User extends BaseModel {
         
        return $result;
     }
+
+    public function UserProduct($data){
+       $database = $this->dbh();
+       $db= $database->prepare("INSERT INTO products (userid,name,price,description,quantity) 
+       VALUES (:userid,:name,:price,:description,:quantity)");
+       $db->bindParam(":userid",$data['userid']); 
+       $db->bindParam(":name",$data['name']); 
+       $db->bindParam(":price",$data['price']); 
+       $db->bindParam(":description",$data['description']); 
+       $db->bindParam(":quantity",$data['quantity']); 
+       $result = $db->execute();
+        
+       return $result;
+    } 
 }
 

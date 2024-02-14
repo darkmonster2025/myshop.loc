@@ -14,6 +14,10 @@ class AuthController extends Controller {
     public function profile() {
         $this->render('user/profile');
     }
+    
+    public function products() {
+        $this->render('user/products');
+    }
 
     public function home() { 
         $this->render('user/home');
@@ -23,6 +27,29 @@ class AuthController extends Controller {
         session_destroy();
         header('Location: /');
         exit;
+    }
+
+    public function createProduct(){
+        $name= $_POST['name'];
+        $price= $_POST['price'];
+        $description= $_POST['description'];
+        $quantity= $_POST['quantity'];
+        $fileUpload= $_POST['fileUpload'];
+
+        $errorMessages = [];
+
+        if(empty($errorMessages)){
+            $user = new User();
+            $createProduct = $user->UserProduct(['name'=>$name,'price'=>$price,'description'=>$description,
+            'quantity'=>$quantity,'userid'=>$_SESSION['userid']]);
+            if($createProduct){
+               header("Location: http://myshop.loc/products");
+               exit;
+            }
+            $errorMessages['general'] = 'something went wrong!';
+        }
+
+        $this->render('user/products', ['errors' => $errorMessages]);
     }
 
     public function updateSubmit(){
@@ -48,7 +75,7 @@ class AuthController extends Controller {
                header("Location: http://myshop.loc/profile");
                exit;
             }
-            $errorMessages['general'] = 'username or password is invalid';
+            $errorMessages['general'] = 'cannot update something went wrong!';
         }
         $this->render('user/profile', ['errors' => $errorMessages]);
     }

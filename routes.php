@@ -8,6 +8,8 @@ $router = new Router();
 
 $router->addRoute('/', UserController::class, 'index');
 $router->addRoute('/home', AuthController::class, 'home');
+$router->addRoute('/products', AuthController::class, 'products');
+$router->addRoute('/createProduct', AuthController::class, 'createProduct');
 $router->addRoute('/login', AuthController::class, 'login');
 $router->addRoute('/loginSubmit', AuthController::class, 'loginSubmit');
 $router->addRoute('/registration', AuthController::class, 'registration');
