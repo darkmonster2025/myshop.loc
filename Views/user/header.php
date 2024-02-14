@@ -36,10 +36,19 @@
 <body>
         <header>
             <ul>
-                <li><a href="/home">Home</a> </li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/logout">Logout</a></li>
-                <li><a href="">Profile</a></li>
+                
+               <?php 
+              if(isset($_SESSION['userid'])){
+                echo '<li><a href="/home">Home</a></li>';
+                echo '<li><a href="/logout">Logout</a></li>';
+                echo '<li><a href="/profile">Profile</a></li>'; 
+              }else {
+                echo '<li><a href="/login">Login</a></li>';
+                echo '<li><a href="/registration">Registration</a></li>';
+              }
+                ?>
+                
+                
             </ul>
         </header>
    

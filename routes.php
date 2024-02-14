@@ -13,3 +13,5 @@ $router->addRoute('/loginSubmit', AuthController::class, 'loginSubmit');
 $router->addRoute('/registration', AuthController::class, 'registration');
 $router->addRoute('/registrationSubmit', AuthController::class, 'registrationSubmit');
 $router->addRoute('/logout', AuthController::class, 'logout');
+$router->addRoute('/profile', AuthController::class, 'profile');
+$router->addRoute('/updateSubmit', AuthController::class, 'updateSubmit');

@@ -38,7 +38,17 @@ class User extends BaseModel {
        
        return $result;
     }
-    
 
+    public function UserUpdate($data){
+       $database = $this->dbh();
+       $db= $database->prepare("UPDATE users SET name=:name, lastname=:lastname, password=:password WHERE id=:id");
+       $db->bindParam(":id",$data['id']); 
+       $db->bindParam(":name",$data['name']); 
+       $db->bindParam(":lastname",$data['lasntame']); 
+       $db->bindParam(":password",$data['password']); 
+       $result = $db->execute();
+        
+       return $result;
+    }
 }
 

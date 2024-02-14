@@ -6,27 +6,57 @@ use MyShop\Controller;
 use MyShop\Models\User;
 
 class AuthController extends Controller {
+
     public function login() {
-        $users = [];
-        $this->render('user/login', ['users' => $users]);
+        $this->render('user/login');
+    }
+
+    public function profile() {
+        $this->render('user/profile');
     }
 
     public function home() { 
-        $users = [];
-        $this->render('user/home', ['users' => $users]);
+        $this->render('user/home');
     }
 
     public function logout() { 
-        $users = [];
         session_destroy();
-        $this->render('user/index', ['users' => $users]);
+        header('Location: /');
+        exit;
+    }
+
+    public function updateSubmit(){
+        $name= $_POST['name'];
+        $lastname= $_POST['lastname'];
+        $password= $_POST['password'];
+        $errorMessages = [];
+
+        if(!isset($_POST['name']) || strlen($_POST['name']) < 3){
+         $errorMessages['nameEror'] = 'name must be more then 3 leters!';
+        }
+        if(!isset($_POST['lastname']) || strlen($_POST['lastname']) < 4){
+         $errorMessages['lastnameEror'] = 'lastname must be more then 4 leters!';
+        }
+        if(!isset($_POST['password']) || strlen($password)<6 || strlen($password)>40){
+         $errorMessages['passwordEror'] = 'password is not correct!';
+        }
+
+        if(empty($errorMessages)){
+            $user = new User();
+            $updateUser = $user->UserUpdate(['name'=>$name,'lasntame'=>$lastname,'password'=>md5($password),'id'=>$_SESSION['userid']]);
+            if($updateUser){
+               header("Location: http://myshop.loc/profile");
+               exit;
+            }
+            $errorMessages['general'] = 'username or password is invalid';
+        }
+        $this->render('user/profile', ['errors' => $errorMessages]);
     }
 
     public function loginSubmit(){
         $usernameORemail= $_POST['usernameORemail'];
         $password = $_POST['password'];
         $errorMessages = []; 
-        
 
         if(!isset($_POST['usernameORemail']) || strlen($_POST['usernameORemail']) < 3){
          $errorMessages['usernameORemailEror'] = 'username or email is not correct!';
@@ -34,21 +64,17 @@ class AuthController extends Controller {
         if(!isset($_POST['password']) || strlen($password)<6 || strlen($password)>40){
          $errorMessages['passwordEror'] = 'password is not correct!';
         }
-       
+
         if(empty($errorMessages)){
             $user = new User();
-
             $loginComfirm = $user->UserLogin(['usernameORemail'=>$usernameORemail,'password'=>md5($password)]);
-        
             if($loginComfirm){
                $_SESSION['userid']=$loginComfirm['id'];
-
                header("Location: http://myshop.loc/home");
                exit;
             }
             $errorMessages['general'] = 'username or password is invalid';
         }
-        
         $this->render('user/login', ['errors' => $errorMessages]);
     }
 
@@ -56,7 +82,7 @@ class AuthController extends Controller {
         $users = [];
         $this->render('user/registration', ['users' => $users]);
     }
-    
+
     public function registrationSubmit(){
         $name= $_POST['name'];
         $lastname= $_POST['lastname'];
@@ -64,7 +90,6 @@ class AuthController extends Controller {
         $email= $_POST['email'];
         $password= $_POST['password'];
         $passwordComfirm= $_POST['passwordComfirm'];
-
         $errorMessages = [];
 
         if(!isset($_POST['name']) || strlen($_POST['name']) < 3){
@@ -85,11 +110,10 @@ class AuthController extends Controller {
         if($_POST['password'] !== $_POST['passwordComfirm']){
          $errorMessages['passwordComfirmEror'] = 'passwords are different!';
         }
-        
+
         if(empty($errorMessages)){ 
         $user = new User();
         $registrationComfrim = $user->UserRegistration(['name'=>$name, 'lastname'=>$lastname,'username'=>$username, 'email'=>$email, 'password'=>md5($password) ]);
-
             if($registrationComfrim){
                 header("Location: http://myshop.loc/login");
                 exit;
@@ -98,6 +122,4 @@ class AuthController extends Controller {
         }
         $this->render('user/registration', ['errors' => $errorMessages]);
     }
-
-
 }
